@@ -4,6 +4,7 @@ from world import World
 
 import random
 from ast import literal_eval
+from collections import deque
 
 # Load world
 world = World()
@@ -29,7 +30,35 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+def traverse_graph(player):
+    # track rooms that have been visited
+    visited = set()
 
+    # track previous directions
+    back_track_path = []
+
+    reverse_directions = {
+        'n': 's',
+        'e': 'w',
+        's': 'n',
+        'w': 'e'
+    }
+
+    while len(visited) < len(world.rooms):
+        player_room = player.current_room
+
+        room_exits = player_room.get_exits()
+
+        visited.add(player_room)
+
+        unvisited_rooms = [direction for direction in room_exits if player_room.get_room_in_direction(direction) not in visited]
+
+        visited.add(player_room)
+
+    return traversal_path
+
+
+traverse_graph(player)
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
