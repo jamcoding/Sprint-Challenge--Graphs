@@ -4,7 +4,6 @@ from world import World
 
 import random
 from ast import literal_eval
-from collections import deque
 
 # Load world
 world = World()
@@ -53,9 +52,18 @@ def traverse_graph(player):
 
         unvisited_rooms = [direction for direction in room_exits if player_room.get_room_in_direction(direction) not in visited]
 
+        # Adding visited rooms to the set
         visited.add(player_room)
 
-    return traversal_path
+        if unvisited_rooms:
+            random_direct = unvisited_rooms[random.randint(0, len(unvisited_rooms) - 1)]
+
+            player.travel(random_direct)
+            back_track_path.append(random_direct)
+            traversal_path.append(random_direct)
+
+        else:
+            reverse = back_track_path.pop(-1)
 
 
 traverse_graph(player)
