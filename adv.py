@@ -65,6 +65,13 @@ def traverse_graph(player):
         else:
             reverse = back_track_path.pop(-1)
 
+            reverse_output = reverse_directions[reverse]
+
+            player.travel(reverse_output)
+            traversal_path.append(reverse_output)
+
+    return traverse_graph
+
 
 traverse_graph(player)
 
