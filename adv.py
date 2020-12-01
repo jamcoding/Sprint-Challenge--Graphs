@@ -29,7 +29,51 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+def traverse_graph(player):
+    # track rooms that have been visited
+    visited = set()
 
+    # track previous directions
+    back_track_path = []
+
+    reverse_directions = {
+        'n': 's',
+        'e': 'w',
+        's': 'n',
+        'w': 'e'
+    }
+
+    while len(visited) < len(world.rooms):
+        player_room = player.current_room
+
+        room_exits = player_room.get_exits()
+
+        visited.add(player_room)
+
+        unvisited_rooms = [direction for direction in room_exits if player_room.get_room_in_direction(direction) not in visited]
+
+        # Adding visited rooms to the set
+        visited.add(player_room)
+
+        if unvisited_rooms:
+            random_direct = unvisited_rooms[random.randint(0, len(unvisited_rooms) - 1)]
+
+            player.travel(random_direct)
+            back_track_path.append(random_direct)
+            traversal_path.append(random_direct)
+
+        else:
+            reverse = back_track_path.pop(-1)
+
+            reverse_output = reverse_directions[reverse]
+
+            player.travel(reverse_output)
+            traversal_path.append(reverse_output)
+
+    return traverse_graph
+
+
+traverse_graph(player)
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
